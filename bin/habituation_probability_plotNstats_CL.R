@@ -71,6 +71,8 @@ data_prob_aggregate <- ddply(data_prob, c("strain", "time"), summarise,
                              reversal = sum(rev),
                              N = sum(no_response + rev))
 
+data_prob_aggregate$time <- factor(c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30))
+
 ## Calculate the proportion of worms responding
 data_prob_aggregate <- ddply(data_prob_aggregate, c("strain", "time"), transform, 
                              rev_prob= (reversal / N))
@@ -109,7 +111,7 @@ my_plot <- ggplot(data_prob_aggregate, aes(time, rev_prob, color=factor(strain))
         geom_line(aes(group=strain)) + ## make a line connecting all the points in the plot
         geom_point(size = 3) + ## make points larger
         geom_errorbar(aes(ymin=conf_int_lower, ymax=conf_int_upper), ## add 95% confidence intervals
-                      width=.1) + ## make the confidence interval 0.1 width
+                      width=.1) + ## make the confidence interval 0.1 width and make sure they don't overlap
         labs(x="Tap Stimulus Number", y="Proportion Reversing") + ## label the x and y axes
         theme(plot.title = element_text(size = 16, vjust=2), ## Make the plot title larger and higher
                legend.title=element_blank(), ## remove the legend label
