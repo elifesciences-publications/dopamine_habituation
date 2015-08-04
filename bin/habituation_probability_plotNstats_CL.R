@@ -111,10 +111,9 @@ my_plot <- ggplot(data_prob_aggregate, aes(time, rev_prob, color=factor(strain))
         geom_line(aes(group=strain)) + ## make a line connecting all the points in the plot
         geom_point(size = 3) + ## make points larger
         geom_errorbar(aes(ymin=conf_int_lower, ymax=conf_int_upper), ## add 95% confidence intervals
-                      width=.1) + ## make the confidence interval 0.1 width and make sure they don't overlap
+                      width=.1) + ## make the confidence interval 0.1 width
         labs(x="Tap Stimulus Number", y="Proportion Reversing") + ## label the x and y axes
-        theme(plot.title = element_text(size = 16, vjust=2), ## Make the plot title larger and higher
-               legend.title=element_blank(), ## remove the legend label
+        theme(legend.title=element_blank(), ## remove the legend label
                legend.key=element_rect(fill='white'), ## remove the blocks around the legend items
                legend.text=element_text(size = 12), ## make the legend text font larger
                axis.text.x=element_text(colour="black", size = 12, angle = 90), ## change the x-axis values font to black and make larger
