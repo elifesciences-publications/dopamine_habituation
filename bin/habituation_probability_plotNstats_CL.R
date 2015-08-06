@@ -1,5 +1,5 @@
 ## Get arguements from command line
-##    $4 in shell is #1 (args[1]) in R: path to data (suggest relative path from project's root directory)
+##    $3 in shell is #1 (args[1]) in R: path to data (suggest relative path from project's root directory)
 
 ## Make args a list of the items in the command line after the script was called.
 args <- commandArgs(trailingOnly = TRUE)
@@ -113,17 +113,21 @@ my_plot <- ggplot(data_prob_aggregate, aes(time, rev_prob, color=factor(strain))
         geom_errorbar(aes(ymin=conf_int_lower, ymax=conf_int_upper), ## add 95% confidence intervals
                       width=.1) + ## make the confidence interval 0.1 width
         labs(x="Tap Stimulus Number", y="Proportion Reversing") + ## label the x and y axes
-        theme(legend.title=element_blank(), ## remove the legend label
-               legend.key=element_rect(fill='white'), ## remove the blocks around the legend items
+        theme(legend.key=element_rect(fill='white'), ## remove the blocks around the legend items
                legend.text=element_text(size = 12), ## make the legend text font larger
                axis.text.x=element_text(colour="black", size = 12, angle = 90), ## change the x-axis values font to black and make larger
                axis.text.y=element_text(colour="black", size = 12), ## change the y-axis values font to black and make larger
                axis.title.x = element_text(size = 12, vjust = -0.2), ## change the x-axis label font to black, make larger, and move away from axis
                axis.title.y = element_text(size = 12, vjust = 1.3)) + ## change the y-axis label font to black, make larger, and move away from axis
-               ylim(c(0,1)) + ## Set the y-axis limits to a range from 0 to 1
+               scale_y_continuous(limits=c(0.00, 1.00), breaks=c(0.00,0.20,0.40,0.60,0.80,1.00), expand = c(0, 0)) + ##Set the y-axis limits to a range from 0 to 1, y-values every 0.20, and remove extra space above and below
+               scale_x_discrete(breaks=c(0,5,10,15,20,25,30)) + ## x-axis values every 5 taps
                theme_bw() + ## remove background to make it white
                theme(panel.border = element_blank(), panel.grid.major = element_blank(), 
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) ## get rif of grid background and borders
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) + ## get rif of grid background and borders 
+               scale_color_discrete(name="") + ## remove legend title
+               theme(legend.key = element_blank()) ## remove boxes around legen values
+
+
 
 ## call the object to plot the figure
 my_plot
