@@ -28,6 +28,9 @@ plate <- str_extract(data$V1, "[0-9]{8}_[0-9]{6}")
 ## Tracker program for filename.
 strain <- str_extract(data$V1,"[A-Za-z]+[-]?[0-9]?")
 
+##strain <- as.factor(strain)
+##levels(strain) <- c("cat2","cat2","efcat","efhc","efcat","efhc","N2")
+
 ## extract time information from first column (V1). Time gets included into the path string when we use 
 ## grep to combine all the files. It's format is: ##.###. But there could be more or less numeric 
 ## digits before or after the decimal place.
@@ -57,8 +60,12 @@ colnames(data) <- c("date", "plate", "strain",  "time", "wrongway", "no_response
 ## make a data frame containing only the count data for probabilities
 data_prob <- data[,1:7]
 
+##levels(data_prob$time) <- c("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30")
+
 ## make a list of the strains
 strain_list  <- unique(data$strain)
+
+##
 
 ## summarise data by strain (so that we can plot the proportion of worms 
 ## responding for each strain). 
@@ -108,29 +115,29 @@ library(ggplot2)
 
 ## make an object called my_plot which contains the plotting commands
 my_plot <- ggplot(data_prob_aggregate, aes(time, rev_prob, color=factor(strain))) + ## plot Reversal probability against time for each strain
-        geom_line(aes(group=strain)) + ## make a line connecting all the points in the plot
-        geom_point(size = 3) + ## make points larger
-        geom_errorbar(aes(ymin=conf_int_lower, ymax=conf_int_upper), ## add 95% confidence intervals
-                      width=.1) + ## make the confidence interval 0.1 width
-        labs(x="Tap Stimulus Number", y="Proportion Reversing") + ## label the x and y axes
-        theme(legend.key=element_rect(fill='white'), ## remove the blocks around the legend items
-               legend.text=element_text(size = 12), ## make the legend text font larger
-               axis.text.x=element_text(colour="black", size = 12, angle = 90), ## change the x-axis values font to black and make larger
-               axis.text.y=element_text(colour="black", size = 12), ## change the y-axis values font to black and make larger
-               axis.title.x = element_text(size = 12, vjust = -0.2), ## change the x-axis label font to black, make larger, and move away from axis
-               axis.title.y = element_text(size = 12, vjust = 1.3)) + ## change the y-axis label font to black, make larger, and move away from axis
-               scale_y_continuous(limits=c(0.00, 1.00), breaks=c(0.00,0.20,0.40,0.60,0.80,1.00), expand = c(0, 0)) + ##Set the y-axis limits to a range from 0 to 1, y-values every 0.20, and remove extra space above and below
-               scale_x_discrete(breaks=c(0,5,10,15,20,25,30)) + ## x-axis values every 5 taps
-               theme_bw() + ## remove background to make it white
-               theme(panel.border = element_blank(), panel.grid.major = element_blank(), 
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) + ## get rif of grid background and borders 
-               scale_color_discrete(name="") + ## remove legend title
-               theme(legend.key = element_blank()) ## remove boxes around legen values
+  geom_line(aes(group=strain, width=2)) + ## make a line connecting all the points in the plot
+  geom_point(size = 3) + ## make points larger
+  geom_errorbar(aes(ymin=conf_int_lower, ymax=conf_int_upper), ## add 95% confidence intervals
+                width=.5) + ## make the error bars 0.3 width
+  labs(x="Tap Stimulus Number", y="Proportion Reversing") + ## label the x and y axes
+  theme(legend.key=element_rect(fill='white'), ## remove the blocks around the legend items
+        legend.text=element_text(size = 24), ## make the legend text font larger
+        axis.text.x=element_text(colour="black", size = 24, angle = 90), ## change the x-axis values font to black and make larger
+        axis.text.y=element_text(colour="black", size = 24), ## change the y-axis values font to black and make larger
+        axis.title.x = element_text(size = 24, vjust = -0.2), ## change the x-axis label font to black, make larger, and move away from axis
+        axis.title.y = element_text(size = 24, vjust = 1.3)) + ## change the y-axis label font to black, make larger, and move away from axis
+  scale_y_continuous(limits=c(0.00, 1.00), breaks=c(0.00,0.20,0.40,0.60,0.80,1.00), expand = c(0, 0)) + ##Set the y-axis limits to a range from 0 to 1, y-values every 0.20, and remove extra space above and below
+  scale_x_discrete(breaks=c(0,5,10,15,20,25,30)) + ## x-axis values every 5 taps
+  theme_classic() + ## remove background to make it white
+  scale_color_discrete(name="") + ## remove legend title
+  theme(legend.key = element_blank()) ## remove boxes around legend values
 
 
 
 ## call the object to plot the figure
 my_plot
+
+##ggsave("Figure7.pdf", useDingbats=FALSE, height=5.5, width=8.5)
 
 ## Get the name of the folder to save the figure to
 folder_to_save_in <- str_extract(data_dir_path, "/.{1,}")
@@ -142,7 +149,7 @@ system(paste("mkdir results", folder_to_save_in, sep=""))
 path_to_save <- paste("results", folder_to_save_in, "/figure.pdf", sep="")
 
 ## Save figure in results in appropriate folder
-pdf(path_to_save, width=9, height=6)
+pdf(path_to_save, width=8.5, height=5.5)
 my_plot
 dev.off()
 
