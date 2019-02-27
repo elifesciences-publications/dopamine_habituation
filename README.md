@@ -28,3 +28,5 @@ instructions:
 
 
 #### This code is still a work in progress. More instructions to come as code is developed further.
+
+### This code is associated with the paper from Loucks et al., "EFHC1, implicated in juvenile myoclonicepilepsy, functions at the cilium andsynapse to modulate dopamine signaling". eLife, 2019. http://dx.doi.org/10.7554/eLife.37271
